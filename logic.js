@@ -86,6 +86,11 @@ var build_absolute_url = function build_absolute_url(req, url) {
     let path = req.url;
     let port = (process.env.TRUST_PROXY_HEADERS && req.get('X-Forwarded-Port')) || req.socket.localPort;
 
+    let override_url = process.env.OVERRIDE_URL;
+    if (override_url) {
+        return override_url + url;
+    }
+
     if (protocol === "http" && port != 80 || protocol === "https" && port != 443) {
         return URL.resolve(protocol + "://" + domain + ':' + port + path, url);
     } else {
